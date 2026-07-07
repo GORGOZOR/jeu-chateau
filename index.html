@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Château Fort — Tower Defense</title>
+  <link rel="stylesheet" href="./styles/main.css" />
+
+  <!--
+    Import map : permet d'écrire `import * as THREE from 'three'` dans les modules
+    sans bundler. Les URLs pointent vers un CDN qui sert Three.js en modules ES.
+    Version épinglée pour la reproductibilité (voir README pour la mise à jour).
+  -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+    }
+  }
+  </script>
+</head>
+<body>
+  <!-- Message affiché si WebGL est indisponible (remplacé au démarrage sinon) -->
+  <div id="webgl-error" class="fullscreen-message hidden">
+    <div class="panel">
+      <h1>Rendu 3D indisponible</h1>
+      <p>Ce jeu a besoin de WebGL, que ton navigateur ne semble pas prendre en charge.
+         Essaie un navigateur récent (Chrome, Edge, Firefox) ou active l'accélération matérielle.</p>
+    </div>
+  </div>
+
+  <!-- Le canvas de rendu occupe tout l'écran -->
+  <canvas id="scene"></canvas>
+
+  <!-- Point d'entrée applicatif : un seul module, qui importera le reste -->
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>

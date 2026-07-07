@@ -1,0 +1,104 @@
+========================================================================
+  CHÂTEAU FORT — FEUILLE DE ROUTE (au 06/07/2026)
+========================================================================
+
+Légende : [x] fait · [~] partiel · [ ] à faire
+
+------------------------------------------------------------------------
+  FAIT
+------------------------------------------------------------------------
+[x] LOT 1 — Fondations (init Three.js, boucle, état, pooling, zoom)
+[x] LOT 2 — Décor (HDRI, post-process/bloom, château, terrain, eau,
+            particules, projectiles)
+[x] LOT 3 — Cœur du TD :
+      - 1 carte "Plaine" + 13 socles
+      - 4 tours (archers, baliste, mage, glace) × 3 niveaux + spécialisations
+      - 12 types d'ennemis + résistances élémentaires
+      - 15 vagues + difficulté normal/difficile
+[x] LOT 4 — Systèmes avancés :
+      - sorts du seigneur (pluie de flèches, gel, renfort) + faveur
+      - statuts cumulables (brûlure, poison, gel, vulnérabilité)
+      - ennemis à capacités (bouclier, invocateur, volant) + auras d'élite
+      - économie + intérêts
+      - ciblage enrichi (6 modes) + info-bulles comparatives + pause tactique
+[x] BONUS — Construction à la souris (clic socle → bâtir, clic tour →
+            améliorer / spécialiser / ciblage / vendre + cercle de portée)
+[x] T5.1 — Chargeur glTF (cache, clonage rigidé, mixer, fallback procédural)
+            + 10 ennemis modélisés (voir MODELES.txt)
+[x] T5.2 — Écran de chargement (barre de progression au démarrage)
+[x] T5.3 — Audio synthétisé (effets + musique + volumes dans le menu ⚙)
+[x] Correctifs — pop des ennemis (visuel placé au départ du chemin dès la
+            création) ; caméra abaissée (meilleure vue des tours)
+[~] T6.5 — HUD + écrans de fin : HUD (or/PV/vague/bouton) et victoire/
+            défaite FAITS. Reste le polish "produit fini" (contrastes,
+            focus clavier, animations d'interface).
+[~] T6.2 — Options : luminosité + angle caméra FAITS (menu ⚙). Reste
+            volume audio, sélecteur de difficulté, persistance des réglages.
+
+------------------------------------------------------------------------
+  RESTE À FAIRE
+------------------------------------------------------------------------
+LOT 5 — Assets
+[~] T5.4  Remplacement des modèles : 10/12 ennemis ont un modèle glTF.
+          - à finir : régler les ÉCHELLES en cours de revue, vérifier
+            l'ancrage au sol de chaque modèle.
+          - optionnel : modèles pour les TOURS et le CHÂTEAU (restent
+            stylisés/procéduraux pour l'instant).
+          - bélier + serpent : restent procéduraux (choix).
+[x] T5.2  Préchargement + écran de progression : FAIT. Barre au démarrage
+          (ciel + 10 modèles), la boucle démarre une fois tout chargé.
+[x] T5.3  Audio : FAIT. Sons SYNTHÉTISÉS (Web Audio, aucun fichier) —
+          tir (par type), mort, pose, sort, début de vague, victoire/
+          défaite + musique d'ambiance. Volumes maître/musique/effets
+          dans le menu ⚙. Remplaçable par de vrais fichiers plus tard.
+
+LOT 6 — Interface & méta-jeu
+[ ] T6.1  Menu principal (écran d'accueil, bouton Jouer). NB : une seule
+          carte → pas de vraie "sélection de carte".
+[ ] T6.3  Sauvegarde locale (localStorage) : meilleur score, réglages,
+          difficulté. NB : marche car servi en local (pas un artifact).
+[ ] T6.4  Progression / objectifs : étoiles selon PV restants, records.
+          NB : réduit, une seule carte (pas de déblocage en chaîne).
+
+LOT 7 — Équilibrage & polish
+[x] T7.1  Mode debug d'équilibrage : FAIT. Overlay (touche F2 ou
+          __CF__.toggleDebug()) : FPS, ennemis + PV terrain, DPS des tours
+          (total + par type), or + or/min, PV château, vague + kills.
+[~] T7.2  Passe d'équilibrage : 1er jet ANALYTIQUE fait (courbe lissée,
+          finale = vrai pic + dragon, mage buffé). Voir EQUILIBRAGE.txt.
+          RESTE : mise au point manette en main (avec F2).
+[x] T7.3  Optimisation 60 FPS : FAIT (dans la limite du non-testable).
+          Modes Auto/Haute/Basse dans ⚙. « Basse » = bloom coupé + ombres
+          1024 + pixelRatio 1. « Auto » : repli automatique si FPS < 40
+          prolongé. pixelRatio déjà plafonné à 2.
+[ ] T7.4  Passe de bugs + cas limites.
+[ ] T7.5  Documentation finale (README développeur).
+
+TÂCHES SAUTÉES (Lot 1)
+[x] T1.6  Feedback d'impact : FAIT. Secousse d'échelle universelle (modèle
+          glTF comme procédural) à chaque coup + flash blanc conservé.
+[x] T1.7  Feedback de mort et de pose : FAIT. Bouffée de poussière à la
+          mort d'un ennemi ; tour qui "pousse" (avec dépassement) à la pose
+          et à l'amélioration + poussière au sol.
+
+------------------------------------------------------------------------
+  DETTE TECHNIQUE (assumée)
+------------------------------------------------------------------------
+- Simulation dans render() avec dt variable au lieu du pas fixe update()
+  prévu par la boucle. La pause marche (garde dans render). À migrer
+  proprement (candidat Lot 7).
+- Échelles des modèles = premières estimations, revue en cours.
+- Ancrage au sol des modèles : à vérifier (offset Y possible par modèle).
+- Outils debug (__CF__, cube de test) : conservés jusqu'à la fin du Lot 7,
+  puis nettoyage.
+
+------------------------------------------------------------------------
+  RECOMMANDATION D'ORDRE (mon avis, à toi de choisir)
+------------------------------------------------------------------------
+1. Finir les ÉCHELLES des modèles (rapide, tu es déjà dessus).
+2. T5.2 écran de chargement (logique, maintenant qu'il y a 10 modèles ;
+   règle aussi le warning texture).
+3. T5.3 audio (gros gain de "game feel" pour un effort modéré).
+4. T6.1 menu principal (donne une vraie porte d'entrée au jeu).
+5. Puis T1.6/T1.7 (feedbacks) et le Lot 7 (équilibrage, perf, bugs).
+========================================================================

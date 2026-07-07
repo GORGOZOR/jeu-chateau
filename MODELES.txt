@@ -1,0 +1,187 @@
+========================================================================
+  CHÂTEAU FORT — MODÈLES glTF/GLB NÉCESSAIRES (préparation T5.1)
+========================================================================
+
+Objet : recensement des modèles 3D à intégrer (loader glTF + animations
+marche/mort, fallback procédural si un modèle manque — cf. T5.1).
+
+Colonne « Priorité » :
+  P1 = ennemis (bougent, gagneraient beaucoup à être animés)
+  P2 = tours + château (statiques, gros gain visuel, pas d'animation)
+  P3 = à garder procédural (inutile de chercher un modèle)
+
+Colonne « Dispo CC0 » : mon estimation de la facilité à trouver un
+équivalent libre correct — à confirmer en cherchant (voir sources plus bas).
+
+------------------------------------------------------------------------
+  ENNEMIS (11) — animations souhaitées : marche (obligatoire), mort (bonus)
+------------------------------------------------------------------------
+  id du jeu       description              Prio  Dispo CC0
+  --------------  -----------------------  ----  ------------------------
+  gobelin         petit humanoïde          P1    Facile ("enemy small")
+  orc             humanoïde massif         P1    Moyen (monstre/personnage)
+  chevalier       humanoïde en armure      P1    Facile (RPG/knight)
+  eclaireur       humanoïde léger/rapide   P1    Facile (personnage de base)
+  chaman          lanceur de sorts (robe)  P1    Moyen (perso en robe)
+  necromancien    lanceur (robe sombre)    P1    Moyen (même base que chaman)
+  porteBouclier   humanoïde + bouclier     P1    Moyen (perso + bouclier)
+  cyclope         géant à œil unique       P1    Moyen ("enemy large"/géant ;
+                                                 cyclope exact = rare)
+  gargouille      créature VOLANTE         P1    Facile ("enemy flying")
+  belier          ENGIN DE SIÈGE (bois)    P1    Difficile — ce n'est PAS
+                                                 une créature. Chercher côté
+                                                 props médiévaux/chariots,
+                                                 ou garder procédural.
+  serpent         serpent à segments       P3*   *Cas spécial : le corps est
+                                                 fait de segments qui suivent
+                                                 une traîne. Un glb rigidé ne
+                                                 collera pas au mouvement
+                                                 actuel → garder procédural,
+                                                 ou repenser l'entité.
+
+------------------------------------------------------------------------
+  TOURS (4) — statiques, aucune animation nécessaire
+------------------------------------------------------------------------
+  archers         tour de guet en bois     P2    Facile (bâtiments médiévaux)
+  baliste         arbalète de siège        P2    Moyen (arme/engin de siège)
+  bucher (mage)   tour de mage             P2    Facile (tour/bâtiment)
+  glace (igloo)   igloo                    P2    Moyen (pack hiver/nature)
+
+------------------------------------------------------------------------
+  DÉCOR
+------------------------------------------------------------------------
+  château         donjon central           P2    Facile (packs château/médiéval)
+
+------------------------------------------------------------------------
+  PROJECTILES (4) — à GARDER procéduraux (trop petits, déjà très bien)
+------------------------------------------------------------------------
+  arrow, bolt, fireball, frostbolt         P3    Inutile de chercher un glb.
+
+========================================================================
+  STRATÉGIE RECOMMANDÉE POUR T5.1
+========================================================================
+1. Importer d'abord ce qui mappe proprement en CC0 : les humanoïdes
+   (gobelin, chevalier, éclaireur, chaman, nécromancien, porte-bouclier,
+   orc), la gargouille (volante), le cyclope (géant), puis les
+   tours/château.
+2. Garder le FALLBACK PROCÉDURAL (déjà prévu par la tâche) pour :
+   le bélier, le serpent, et tous les projectiles.
+3. Animations : viser un jeu d'anims commun (marche/mort) et le
+   retargeter sur les personnages plutôt que chercher chaque anim.
+   La "Universal Animation Library" de Quaternius (CC0, 120+ anims dont
+   locomotion et mort) est faite pour ça.
+4. Cohérence visuelle : privilégier UN fournisseur dominant pour un
+   style homogène (Quaternius = low-poly stylisé, cohérent avec le rendu
+   actuel), et compléter au coup par coup ailleurs.
+
+========================================================================
+  SOURCES OPEN / CC0 (vérifiées le 04/07/2026)
+========================================================================
+Rappel licences :
+  CC0        = domaine public, aucune attribution requise, usage
+               commercial OK. Idéal.
+  CC-BY      = libre MAIS attribution obligatoire (créditer l'auteur).
+  CC-BY-SA   = attribution + partage à l'identique (contaminant).
+  CC-BY-NC   = pas d'usage commercial → à éviter par principe.
+Toujours vérifier la licence AU CAS PAR CAS sur la page du modèle.
+
+1. QUATERNIUS — https://quaternius.com   [CC0]
+   Le plus adapté : packs low-poly stylisés, personnages, MONSTRES
+   ("Ultimate Monsters"), bâtiments, médiéval, nature. Formats OBJ/FBX/
+   glTF + sources .blend. Tout en CC0.
+   → Voir aussi la "Universal Animation Library" (CC0) pour les anims
+     marche/mort retargetables.
+
+2. KENNEY — https://kenney.nl   [CC0]
+   40 000+ assets CC0. Excellents kits médiévaux/bâtiments (utile pour
+   tours + château). Style un peu plus "jouet" que Quaternius.
+
+3. POLY PIZZA — https://poly.pizza   [CC0 + CC-BY, filtrable]
+   Agrégateur, sans compte, export glTF. Filtres "CC0" et "Animé".
+   Recense déjà les monstres Quaternius pertinents ici : "Enemy Small",
+   "Enemy Large", "Enemy Flying", "King", "Mech"...
+   ATTENTION : contient aussi du CC-BY → vérifier la licence par modèle.
+   Filtre direct : https://poly.pizza/explore?anim=1&lic=1
+
+4. POLY HAVEN — https://polyhaven.com   [CC0]
+   100% CC0. Surtout textures/HDRI (déjà utilisé dans le projet pour le
+   ciel/les matières), quelques modèles.
+
+5. SKETCHFAB (filtre CC0) — https://sketchfab.com   [CC0 + CC-BY, mixte]
+   Beaucoup de choix, mais licences très variables. NOTE : la boutique
+   payante a fermé (la vente est passée sur Fab d'Epic), MAIS les
+   téléchargements Creative Commons/CC0 gratuits fonctionnent toujours.
+   Conseil : télécharger ET ARCHIVER ce qu'on prend (ne pas dépendre
+   d'un lien qui pourrait disparaître).
+
+6. Méta-liste CC0 (pour aller plus loin) —
+   https://github.com/madjin/awesome-cc0
+   Liste maintenue de ressources CC0 (modèles, textures, audio).
+
+------------------------------------------------------------------------
+  NOTE HONNÊTE
+------------------------------------------------------------------------
+- La liste des modèles est SÛRE (déduite des entités réelles du jeu).
+- Les licences ci-dessus ont été vérifiées le 04/07/2026, mais elles
+  peuvent changer et varient par modèle : re-vérifier sur chaque page.
+- Les créatures "génériques" (gobelin, orc, géant, volant) se trouvent
+  bien en CC0 ; les créatures TRÈS spécifiques (cyclope exact, gargouille
+  exacte, nécromancien nommé) sont plus rares — on prend souvent un
+  modèle proche qu'on adapte (couleur/échelle), ce que le jeu fait déjà.
+========================================================================
+
+========================================================================
+  CORRESPONDANCE ENNEMIS ↔ MONSTRES QUATERNIUS (d'après Color_Guide.png)
+========================================================================
+Pack « Ultimate Monsters » (variantes Big / Blob / Flying). Palette
+embarquée dans chaque .gltf → pas de fichier couleur à fournir en plus.
+Proposition de correspondance (à valider par toi, choix libre) :
+
+  ennemi du jeu    modèle proposé            statut
+  ---------------  ------------------------  --------------------------
+  gobelin          Orc Skull (Big)           ✓ FAIT
+  dragon           Dragon (Flying)           ✓ FAIT
+  orc              Orc (Big)                 idéal
+  eclaireur        Ninja (Big/Blob)          idéal (agile/rapide)
+  chaman           Wizard (Blob)             idéal (lanceur de sorts)
+  necromancien     Blue Demon ou Ghost       proche (caster sombre)
+  cyclope          Yeti ou Demon (Big)       proche (gros bourrin ;
+                                             pas de monstre à œil unique)
+  chevalier        Tribal (Big)              approx. (pas de chevalier ;
+                                             guerrier le plus proche)
+  porteBouclier    Tribal / Orc + variante   approx. (pas de porteur de
+                                             bouclier dédié)
+  gargouille       Demon ou Ghost (Flying)   bon (créature volante)
+  belier           — (aucun)                 reste PROCÉDURAL (engin
+                                             de siège, pas un monstre)
+  serpent          — (aucun)                 reste PROCÉDURAL (corps à
+                                             segments)
+
+Notes :
+- « idéal » = correspond bien au rôle ; « proche/approx. » = faute de
+  mieux, on adapte (échelle/couleur) comme le jeu le fait déjà.
+- Tu peux bien sûr choisir autrement (ex. Mushroom King en boss).
+- Prochains à m'envoyer : Orc, Ninja, Wizard (couvrent orc, éclaireur,
+  chaman d'un coup), puis un Flying pour la gargouille.
+
+--- MISE À JOUR : 7 modèles intégrés ---
+FAITS : gobelin (Orc_Skull), orc (Orc), eclaireur (Ninja),
+        chaman (Wizard), porteBouclier (BlueDemon), gargouille (Demon,
+        volant), dragon (Dragon, boss volant).
+RESTENT sans modèle (fallback procédural) : chevalier, cyclope,
+        necromancien, belier*, serpent* (*procéduraux par choix).
+Note anims : les modèles "Blob" (Orc/Ninja/Wizard) utilisent Walk +
+HitRecieve (pas de Run) ; le Demon volant n'a que Flying_Idle (pas de
+mort → il disparaît sans animation, contrairement aux autres).
+
+--- MISE À JOUR : 10 ennemis modélisés (quasi-complet) ---
++ chevalier (MushroomKing), cyclope (Yeti), necromancien (Fish).
+Il ne reste QUE le bélier et le serpent en procédural, par choix
+(engin de siège / corps à segments). Tous les autres ont leur modèle 3D.
+
+--- MISE À JOUR : gobelin change de modèle ---
+gobelin : Orc_Skull ABANDONNÉ (tête rose au lieu du masque blanc)
+          → remplacé par Chicken (Walk/Death/HitRecieve).
+eclaireur : Ninja mis à jour (nouvelle version, Run + HitReact au lieu
+          de Walk + HitRecieve — mieux pour un éclaireur rapide).
+Orc_Skull.gltf retiré du projet (plus utilisé).

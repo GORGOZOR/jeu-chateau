@@ -1,0 +1,64 @@
+========================================================================
+  CHÂTEAU FORT — PASSE D'ÉQUILIBRAGE T7.2 (analytique) — 06/07/2026
+========================================================================
+
+⚠ IMPORTANT : passe ANALYTIQUE (basée sur les chiffres), PAS playtestée.
+La mise au point finale se fait manette en main, avec l'overlay F2
+(FPS, DPS des tours, PV sur le terrain, or/min). Ces changements sont un
+premier jet raisonné, à ajuster selon ton ressenti.
+
+------------------------------------------------------------------------
+  DIAGNOSTIC (avant)
+------------------------------------------------------------------------
+Courbe de PV par vague en dents de scie, avec deux défauts majeurs :
+  - Vague 14 (3970 PV) PLUS DURE que la finale, vague 15 (2890) → pic au
+    mauvais endroit, fin anticlimatique.
+  - Vague 10 : chute brutale (×0.43) après le pic de la 9.
+  - Début choppy (×2.22, ×0.85, ×1.82 sur les vagues 2-4).
+Tours : archers largement les plus rentables (73 DPS/100 or), mage le plus
+faible (13) ET portée ridicule (8-10) → à peine utilisable.
+Le dragon (modèle intégré) n'apparaissait dans AUCUNE vague.
+
+------------------------------------------------------------------------
+  CHANGEMENTS APPLIQUÉS
+------------------------------------------------------------------------
+Vagues (lissage + finale = vrai pic) :
+  V2  400 → 340   (gobelins 8→6) : saut depuis V1 adouci
+  V3  340 → 440   (éclaireurs 5→6, orcs 3→4) : comble le creux
+  V9  1800 → 1650 (chevaliers 4→3) : pic mini-boss adouci
+  V10 780 → 1280  (+éclaireurs/orcs/chevaliers) : plus de chute brutale
+  V13 910 → 1680  (+chevaliers/orcs) : vrai boss d'avant-finale
+  V14 3970 → 2410 (moins d'élites) : ne dépasse plus la finale
+  V15 2890 → 3590 (+ BOSS DRAGON) : la finale devient le pic
+
+Nouvelle courbe : 180, 340, 440, 620, 640, 740, 810, 770, 1650, 1280,
+  1610, 1740, 1680, 2410, 3590 → montée régulière, pic mini-boss en 9,
+  répit en 10, finale la plus dure (avec dragon + 5 volants).
+
+Tours — buff du mage (sa faiblesse = la portée) :
+  portée 8/9/10 → 10/12/14   |   dégâts 6/11/18 → 7/13/20
+  (reste moins rentable que les archers au tir unique, mais sa zone
+   d'effet + brûlure le rendent enfin viable contre les groupes.)
+
+------------------------------------------------------------------------
+  NON MODIFIÉ (volontairement — à décider en jouant)
+------------------------------------------------------------------------
+- Économie (départ 160, intérêts 15% plafonnés à 100, primes 10+N/vague) :
+  ~3480 or gagnables sur la partie. Semble cohérent, mais c'est le plus
+  difficile à juger sans jouer → à valider avec l'or/min de l'overlay.
+- Archers volontairement laissés comme "tour par défaut" rentable, plutôt
+  que nerfés (les joueurs préfèrent qu'on renforce les autres options).
+- Glace : dégâts faibles assumés (c'est une tour utilitaire de ralenti).
+
+------------------------------------------------------------------------
+  À TESTER EN PRIORITÉ (avec F2)
+------------------------------------------------------------------------
+1. La finale (V15) est-elle bien le sommet ? Le dragon + les 5 volants
+   exigent une vraie défense anti-air (archers/baliste) — est-ce trop/
+   pas assez ?
+2. La V9 (pic) puis V10 (répit) : le rythme est-il agréable ?
+3. Le mage buffé est-il devenu intéressant, ou trop fort/encore faible ?
+4. L'or suffit-il à tenir sans être trop abondant ? (regarde l'or/min et
+   ce qu'il te reste après chaque vague.)
+Note-moi tes ressentis chiffrés et j'ajuste précisément.
+========================================================================

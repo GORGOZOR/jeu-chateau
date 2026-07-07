@@ -1,0 +1,200 @@
+========================================================================
+  CHÂTEAU FORT — COMMANDES CONSOLE UTILES
+========================================================================
+
+Toutes les commandes s'utilisent dans la console du navigateur (F12 →
+onglet "Console"). Elles commencent toutes par __CF__.
+
+RAPPEL CACHE : si tu ne vois pas tes changements après avoir remplacé les
+fichiers, ouvre F12 → onglet "Network" → coche "Disable cache", et garde
+les DevTools ouverts. Ctrl+Shift+R ne suffit pas toujours.
+
+------------------------------------------------------------------------
+  CONSTRUCTION À LA SOURIS (le cœur du jeu)
+------------------------------------------------------------------------
+IMPORTANT : il n'y a PLUS de tours pré-posées. Tu construis tout toi-même
+avec ton or de départ (160).
+
+  CLIC sur un SOCLE LIBRE (dalle, surbrillance verte au survol)
+      → menu de construction : les 4 tours avec leur coût.
+  CLIC sur une TOUR
+      → menu de gestion : Améliorer / Spécialiser (niv 3) /
+        Cible (cycle des 6 modes) / Vendre (remboursement 70 %).
+  Un CERCLE BLEU montre la portée de la tour sélectionnée.
+  Clic dans le vide : referme les menus.
+
+Tout cela fonctionne AUSSI pendant la pause tactique (Espace) — c'est
+fait pour : fige le temps, construis tranquillement, reprends.
+
+------------------------------------------------------------------------
+  VAGUES (le vrai jeu)
+------------------------------------------------------------------------
+Le HUD (en haut à gauche) affiche l'or (+ intérêts attendus), les PV du
+château et la vague. Le bouton « ⚔ Lancer la vague » démarre la suivante
+— avec le compte à rebours du lancement automatique (8 s d'entracte).
+À la fin : écran Victoire/Défaite avec les statistiques et « Rejouer ».
+
+En console si besoin :
+__CF__.nextWave()              Équivalent du bouton du HUD.
+__CF__.waveManager             Accès au gestionnaire (avancé).
+
+Il y a 15 vagues, avec des boss aux vagues 5 (bélier), 10 (serpent) et
+15 (cyclope). Repousser une vague rapporte une prime d'or.
+
+------------------------------------------------------------------------
+  ENNEMIS (test manuel)
+------------------------------------------------------------------------
+__CF__.spawnEnemy('gobelin')          Fait apparaître un ennemi précis.
+__CF__.spawnEnemy('chevalier', true)  ...en version ÉLITE (dorée, +PV,
+                                      +or, avec une aura aléatoire).
+__CF__.spawnWave()                    Une vague de test des 8 types de base.
+__CF__.spawnWave(true)                Une vague d'élites.
+__CF__.spawnRandomLoop()              Spawn aléatoire EN BOUCLE (1 ennemi
+                                      toutes les 1.2 s).
+__CF__.spawnRandomLoop(0.6, 0.3)      Interval 0.6 s, 30 % de chance d'élite.
+__CF__.stopRandomLoop()               Arrête le spawn en boucle.
+__CF__.clearEnemies()                 Retire tous les ennemis.
+
+Types d'ennemis disponibles :
+  gobelin, orc, chevalier, eclaireur, belier, chaman, serpent, cyclope,
+  gargouille (volante), porteBouclier (bouclier régénérant),
+  necromancien (invoque des renforts),
+  dragon (BOSS volant, modèle 3D animé — résiste au feu, faible au givre)
+
+Modèles 3D actifs : gobelin, orc, chevalier, eclaireur, chaman, cyclope,
+gargouille (volante), porteBouclier, necromancien, dragon. Seuls le
+belier et le serpent restent en rendu procédural (par choix).
+
+------------------------------------------------------------------------
+  RÉSISTANCES DES ENNEMIS
+------------------------------------------------------------------------
+__CF__.enemyInfo('chevalier')   Affiche ce à quoi l'ennemi résiste et
+                                ce à quoi il est faible.
+  (rappel : archers = contondant, baliste = perçant, mage = feu,
+   igloo = givre)
+
+------------------------------------------------------------------------
+  TOURS
+------------------------------------------------------------------------
+__CF__.maxAllTowers()           Monte toutes les tours au niveau 3.
+__CF__.specializeAll(0)         Applique la 1re spécialisation à toutes
+                                les tours de niveau 3.
+__CF__.specializeAll(1)         ...la 2e branche.
+__CF__.towers                   Liste des tours en jeu.
+__CF__.towers[0].upgrade()      Améliore une tour d'un niveau.
+
+  Inspecter une tour en grand (isolée, en rotation) :
+__CF__.inspectTower('baliste', 2)   Types : archers, baliste, glace, bucher
+__CF__.inspectTower('archers', 3)   Niveaux : 1 à 3
+__CF__.clearInspect()               Retire la tour d'inspection.
+
+  Inspecter un MODÈLE 3D (régler l'échelle, vérifier les animations) :
+__CF__.inspectModel('cyclope')      Affiche le modèle (par nom d'ennemi OU
+                                    par clé de modèle), à l'échelle actuelle,
+                                    en rotation, devant la caméra.
+__CF__.inspectModel('cyclope','Death')  Joue une animation précise.
+__CF__.inspectAnim('Walk')          Change l'animation en cours.
+__CF__.inspectScale(3.0)            Règle la taille EN DIRECT — trouve la
+                                    bonne valeur puis donne-la moi.
+__CF__.clearInspectModel()          Retire le modèle inspecté.
+  Ennemis modélisés : gobelin, orc, chevalier, eclaireur, chaman, cyclope,
+  gargouille, porteBouclier, necromancien, dragon.
+
+------------------------------------------------------------------------
+  SORTS DU SEIGNEUR (barre en bas de l'écran)
+------------------------------------------------------------------------
+Clique un bouton de sort, puis clique sur le terrain pour le lancer.
+Ou en console :
+__CF__.selectSpell('arrowRain')   Puis clic terrain. (pluie de flèches)
+__CF__.selectSpell('frost')       Gel de zone.
+__CF__.selectSpell('rampart')     Barricade temporaire.
+
+Les sorts coûtent de la FAVEUR (jauge en bas), qui se régénère seule.
+
+------------------------------------------------------------------------
+  TEST DE COMBAT (cube fictif)
+------------------------------------------------------------------------
+__CF__.startCombatTest()        Un cube très résistant avance en boucle,
+                                les tours lui tirent dessus (pour juger
+                                les tirs sans vrais ennemis).
+__CF__.startCombatTest(2000)    ...avec 2000 PV (plus fragile).
+__CF__.stopCombatTest()         Arrête le test.
+
+------------------------------------------------------------------------
+  RÉGLAGES : LUMINOSITÉ + CAMÉRA (menu ⚙)
+------------------------------------------------------------------------
+Bouton ⚙ en haut à droite : ouvre le panneau de réglages.
+  - Luminosité : slider 0.4 (sombre) → 1.8 (clair), 1.0 = neutre.
+  - Angle caméra : slider −60° → +60° autour de la vue initiale.
+
+Au clavier : maintenir ← ou → fait pivoter la caméra autour du château
+(même en pause). La molette zoome toujours.
+
+__CF__.setBrightness(1.3)       Règle la luminosité en console.
+__CF__.cameraZoom.setAngle(45)  Oriente la caméra en console.
+
+------------------------------------------------------------------------
+  CIBLAGE DES TOURS (T4.5)
+------------------------------------------------------------------------
+Chaque tour a un MODE DE CIBLAGE réglable :
+  first (le plus avancé, défaut), last (le moins avancé),
+  nearest (le plus proche), strongest (le plus de PV),
+  weakest (le moins de PV), flying (volants d'abord).
+
+__CF__.targetModes()                 Liste les modes + celui de chaque tour.
+__CF__.setTargetMode(0, 'flying')    Change le mode de la tour n°0.
+__CF__.setAllTargetModes('strongest') Toutes les tours d'un coup.
+
+Note : mage et igloo ne peuvent JAMAIS viser les volants, quel que soit
+leur mode (le filtre prime).
+
+------------------------------------------------------------------------
+  INFO-BULLES + PAUSE TACTIQUE (T4.5)
+------------------------------------------------------------------------
+SURVOLE une tour avec la souris : une info-bulle montre ses stats
+actuelles → celles du niveau suivant (avec les gains), le coût, la valeur
+de revente, le mode de ciblage — et au niveau 3, les spécialisations.
+
+Touche ESPACE : pause tactique. Le temps est figé (ennemis, vagues,
+faveur, sorts), mais tu peux toujours zoomer, consulter les info-bulles,
+améliorer/spécialiser les tours et régler le ciblage. Les sorts sont
+bloqués pendant la pause. Espace à nouveau pour reprendre.
+
+------------------------------------------------------------------------
+  ÉCONOMIE (T4.4)
+------------------------------------------------------------------------
+Les intérêts sont ACTIVÉS par défaut : à la fin de chaque vague, tu gagnes
+15% de ton or en banque (plafonné à 100). Épargner rapporte donc — mais il
+faut aussi dépenser pour tenir. C'est le dilemme central.
+
+__CF__.interestInfo()           Affiche taux, plafond et intérêts attendus
+                                sur ton or actuel.
+__CF__.setInterest(false)       Désactive les intérêts.
+__CF__.setInterest(true)        Réactive les intérêts.
+__CF__.economyDebug(20)         Mode debug : +20 or/seconde (pour tester).
+__CF__.economyDebug(0)          Coupe le mode debug.
+
+------------------------------------------------------------------------
+  DIVERS
+------------------------------------------------------------------------
+__CF__.setQuality('low')        Passe en rendu rapide (sans post-process).
+__CF__.setQuality('high')       Rendu complet (bloom, etc.).
+__CF__.GameState.get.gold()     Or actuel.
+__CF__.GameState.get.hp()       PV du château.
+__CF__.GameState.get.favor()    Faveur actuelle (sorts).
+
+------------------------------------------------------------------------
+  EXEMPLE DE SESSION DE TEST COMPLÈTE
+------------------------------------------------------------------------
+  1. Clique sur des socles pour construire tes premières tours (160 or).
+  2. Clique « ⚔ Lancer la vague » dans le HUD (en haut à gauche).
+  3. Entre les vagues : améliore au clic, ou Espace pour figer et bâtir.
+  ... et lance des sorts avec la barre du bas quand ça chauffe.
+  (Triche : __CF__.economyDebug(50) pour de l'or facile,
+   __CF__.maxAllTowers() pour tout monter niveau 3.)
+
+  Ou pour juste voir plein d'ennemis et leurs auras d'élite :
+  __CF__.maxAllTowers()
+  __CF__.spawnRandomLoop(0.8, 0.5)
+  ... __CF__.stopRandomLoop() pour arrêter.
+========================================================================
