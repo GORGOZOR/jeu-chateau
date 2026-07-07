@@ -230,6 +230,12 @@ export function createEnemy(scene, config, path, { onDeath, onReachCastle, onSum
   group.position.set(path[0][0], flyY, path[0][1]);
   let hitFlash = 0;
   let _wasFlashing = false;   // pour restaurer l'émissif du modèle après le flash
+  let flashCd = 0;            // délai anti-répétition entre deux flashs
+  // Réglages du flash d'impact (T1.6 révisé) — éclat bref et discret :
+  const FLASH_DUR = 0.06;     // durée du flash (très court)
+  const FLASH_PEAK = 0.35;    // intensité max de l'éclat (0 = rien, 1 = blanc plein)
+  const FLASH_GAP = 0.25;     // délai minimal entre deux flashs
+  const _flashWhite = new THREE.Color(0xffffff);
   let healTimer = 0;
   let auraHealTimer = 0;      // timer de l'aura de soin d'élite
   let dead = false;
@@ -273,7 +279,7 @@ export function createEnemy(scene, config, path, { onDeath, onReachCastle, onSum
         }
       }
       hp -= dmg;
-      hitFlash = 0.12;   // flash blanc à l'impact (T1.6)
+      if (flashCd <= 0) { hitFlash = FLASH_DUR; flashCd = FLASH_GAP; }   // petit éclat, espacé (T1.6)
       if (hp <= 0) { hp = 0; die(); }
     },
 
@@ -444,17 +450,20 @@ export function createEnemy(scene, config, path, { onDeath, onReachCastle, onSum
 
       // Apparence : flash blanc si touché, sinon teinte du statut dominant,
       // sinon gel ponctuel, sinon couleur normale.
+      if (flashCd > 0) flashCd -= dt;   // délai anti-répétition entre flashs
       if (hitFlash > 0) {
         hitFlash -= dt;
-        const k = Math.min(1, hitFlash / 0.12);   // intensité qui retombe
+        const k = Math.min(1, hitFlash / FLASH_DUR) * FLASH_PEAK;   // éclat bref et discret
         if (modelMats) {
-          // Modèle : on pousse l'émissif vers le blanc (non destructif).
+          // Modèle : léger surplus d'émissif (non destructif).
           for (const m of modelMats) {
             if (m.emissive) m.mat.emissive.setRGB(k, k, k);
             m.mat.emissiveIntensity = 1;
           }
         } else {
-          bodyMat.color.setHex(0xffffff);
+          // Procédural : teinte partielle vers le blanc (jamais blanc plein).
+          bodyMat.color.setHex(config.color);
+          bodyMat.color.lerp(_flashWhite, k);
         }
         _wasFlashing = true;
       } else {
