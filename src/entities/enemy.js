@@ -182,6 +182,7 @@ export function createEnemy(scene, config, path, { onDeath, onReachCastle, onSum
   // --- Modèle glTF (T5.1) : si disponible, il remplace le corps procédural.
   // Sinon (modèle absent/échec), on garde le corps stylisé → fallback.
   let modelInst = null;
+  let modelMats = null;   // matériaux du modèle + emissive d'origine (flash blanc)
   const bodyParts = [body, head]; // parties procédurales à masquer si modèle
   if (config.model) {
     modelInst = createModelInstance(config.model);
@@ -195,6 +196,19 @@ export function createEnemy(scene, config, path, { onDeath, onReachCastle, onSum
       // lance l'animation de déplacement en boucle.
       const moveAnim = config.anims?.move;
       if (moveAnim) modelInst.play(moveAnim, { loop: true });
+      // Collecte les matériaux (dédupliqués) + leur émissif d'origine, pour
+      // le flash blanc à l'impact (on module l'émissif, non destructif).
+      const seen = new Set();
+      modelMats = [];
+      modelInst.scene.traverse((o) => {
+        if (!o.isMesh) return;
+        const mats = Array.isArray(o.material) ? o.material : [o.material];
+        for (const m of mats) {
+          if (!m || seen.has(m)) continue;
+          seen.add(m);
+          modelMats.push({ mat: m, emissive: m.emissive ? m.emissive.clone() : null, intensity: m.emissiveIntensity ?? 1 });
+        }
+      });
     }
   }
 
@@ -215,7 +229,7 @@ export function createEnemy(scene, config, path, { onDeath, onReachCastle, onSum
   // sinon le groupe reste à l'origine (près du château) le temps d'une frame.
   group.position.set(path[0][0], flyY, path[0][1]);
   let hitFlash = 0;
-  let hitPunch = 0;   // secousse d'échelle à l'impact (T1.6), modèle ou procédural
+  let _wasFlashing = false;   // pour restaurer l'émissif du modèle après le flash
   let healTimer = 0;
   let auraHealTimer = 0;      // timer de l'aura de soin d'élite
   let dead = false;
@@ -259,8 +273,7 @@ export function createEnemy(scene, config, path, { onDeath, onReachCastle, onSum
         }
       }
       hp -= dmg;
-      hitFlash = 0.1;
-      hitPunch = 0.14;   // pop visuel (T1.6)
+      hitFlash = 0.12;   // flash blanc à l'impact (T1.6)
       if (hp <= 0) { hp = 0; die(); }
     },
 
@@ -342,14 +355,6 @@ export function createEnemy(scene, config, path, { onDeath, onReachCastle, onSum
       if (modelInst) {
         const hx = headingSeg.bx - headingSeg.ax, hz = headingSeg.bz - headingSeg.az;
         if (hx || hz) group.rotation.y = Math.atan2(hx, hz);
-      }
-      // Secousse d'impact (T1.6) : petit pop d'échelle qui retombe. Universel
-      // (agit sur le groupe → modèle glTF comme corps procédural).
-      if (hitPunch > 0) {
-        hitPunch = Math.max(0, hitPunch - dt);
-        group.scale.setScalar(1 + 0.22 * (hitPunch / 0.14));
-      } else if (group.scale.x !== 1) {
-        group.scale.setScalar(1);
       }
 
       // Bouclier régénérant (T4.3) : après un délai sans être touché, il
@@ -437,14 +442,33 @@ export function createEnemy(scene, config, path, { onDeath, onReachCastle, onSum
         if (auraDisc) auraDisc.material.opacity = 0.18 + Math.sin(dist * 3) * 0.05;
       }
 
-      // apparence : flash blanc si touché, teinte bleue si ralenti
       // Apparence : flash blanc si touché, sinon teinte du statut dominant,
       // sinon gel ponctuel, sinon couleur normale.
-      if (hitFlash > 0) { bodyMat.color.setHex(0xffffff); hitFlash -= dt; }
-      else {
+      if (hitFlash > 0) {
+        hitFlash -= dt;
+        const k = Math.min(1, hitFlash / 0.12);   // intensité qui retombe
+        if (modelMats) {
+          // Modèle : on pousse l'émissif vers le blanc (non destructif).
+          for (const m of modelMats) {
+            if (m.emissive) m.mat.emissive.setRGB(k, k, k);
+            m.mat.emissiveIntensity = 1;
+          }
+        } else {
+          bodyMat.color.setHex(0xffffff);
+        }
+        _wasFlashing = true;
+      } else {
+        // Restaure l'émissif du modèle une fois le flash terminé.
+        if (modelMats && _wasFlashing) {
+          for (const m of modelMats) {
+            if (m.emissive) m.mat.emissive.copy(m.emissive);
+            m.mat.emissiveIntensity = m.intensity;
+          }
+          _wasFlashing = false;
+        }
+        // Teinte du corps procédural selon le statut (sans effet si masqué).
         const st = status.list();
         if (st.length) {
-          // teinte du statut le plus « fort » (dernier appliqué en priorité feu>poison>gel).
           const priority = ['burn', 'poison', 'chill', 'vulnerable'];
           const dominant = priority.find(id => status.has(id));
           const found = st.find(s => s.id === dominant) || st[0];

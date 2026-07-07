@@ -62,3 +62,16 @@ Tours — buff du mage (sa faiblesse = la portée) :
    ce qu'il te reste après chaque vague.)
 Note-moi tes ressentis chiffrés et j'ajuste précisément.
 ========================================================================
+
+------------------------------------------------------------------------
+  AJUSTEMENT (07/07) — retour de jeu
+------------------------------------------------------------------------
+- Dégâts de TOUTES les tours : -20% (×0.8). Ex. archers niv3 66→53 DPS,
+  baliste niv3 72→58, mage niv3 20→16, glace niv3 23→18.
+  (Les spécialisations niv3 s'appliquent par-dessus, inchangées.)
+- Or gagné : +30% sur tous les ennemis (multiplicateur global
+  GOLD_REWARD_MULT dans makeEnemyConfig). Ex. gobelin 3→4, orc 6→8,
+  cyclope 40→52. Objectif : compenser les tours affaiblies et pousser à
+  construire davantage.
+- Feedback d'impact : la secousse d'échelle (T1.6) est REMPLACÉE par un
+  simple FLASH BLANC (émissif sur les modèles, couleur sur le procédural).

@@ -316,9 +316,10 @@ function updateEnemies(dt) {
   }
   for (const t of towers) t.setDisabled(toDisable.has(t));
 
-  if (enemies.length) {
-    for (const t of towers) t.update(dt, enemies);
-  }
+  // Toujours mettre à jour les tours, même sans ennemi : sinon l'animation
+  // de pose/amélioration ne joue pas pendant l'entracte. Sans cible, elles
+  // ne font que patienter (coût négligeable).
+  for (const t of towers) t.update(dt, enemies);
 }
 
 /* --------------------------------------------------------------------
@@ -850,7 +851,15 @@ let lastRenderTime = performance.now();
 let elapsed = 0;
 function render(alpha) {
   const now = performance.now();
-  const dt = (now - lastRenderTime) / 1000;
+  // dt clampé (T7.4) : si l'onglet a été en arrière-plan (rAF suspendu),
+  // (now - lastRenderTime) peut valoir plusieurs secondes → sans plafond,
+  // les ennemis se téléporteraient et les projectiles sauteraient. On borne
+  // à 0.1 s : au retour, le jeu reprend proprement (il « attend » hors focus).
+  // La vitesse (×2/×3 via GameState.setSpeed) s'applique ici — sinon elle
+  // n'aurait aucun effet, la simulation vivant dans render() et non dans
+  // update(). Second clamp après la vitesse : garde-fou anti-tunneling.
+  let dt = Math.min((now - lastRenderTime) / 1000, 0.1);
+  dt = Math.min(dt * GameState.get.speed(), 0.1);
   lastRenderTime = now;
 
   // Pause tactique (T4.5) : le temps de jeu est FIGÉ (simulation, ambiance,

@@ -102,3 +102,15 @@ TÂCHES SAUTÉES (Lot 1)
 4. T6.1 menu principal (donne une vraie porte d'entrée au jeu).
 5. Puis T1.6/T1.7 (feedbacks) et le Lot 7 (équilibrage, perf, bugs).
 ========================================================================
+
+
+------------------------------------------------------------------------
+  DETTE TECHNIQUE PERSISTANTE (après T7.4)
+------------------------------------------------------------------------
+- La simulation vit dans render() (dt horloge), pas dans update() fixe qui
+  reste vide. Le clamp de dt (0.1s) + l'application de la vitesse au dt de
+  render neutralisent les symptômes pratiques (téléportation, fast-forward
+  cassé), mais la migration propre vers le pas fixe déterministe n'est PAS
+  faite. À envisager si un jour on veut du replay/déterminisme strict.
+- Nécromancien : invocation infinie possible s'il n'est jamais tué (au sol,
+  donc tuable → choix de design, priorité de cible).

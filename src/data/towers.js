@@ -24,9 +24,9 @@ export const TOWER_TYPES = {
     accent: 0x6a8a4a,          // toit vert
     projectile: 'arrow',
     levels: [
-      { damage: 10, range: 12, fireRate: 1.5, cost: 50 },
-      { damage: 18, range: 14, fireRate: 1.8, cost: 60 },
-      { damage: 30, range: 16, fireRate: 2.2, cost: 90 },
+      { damage: 8, range: 12, fireRate: 1.5, cost: 50 },
+      { damage: 14, range: 14, fireRate: 1.8, cost: 60 },
+      { damage: 24, range: 16, fireRate: 2.2, cost: 90 },
     ],
   },
   baliste: {
@@ -38,9 +38,9 @@ export const TOWER_TYPES = {
     projectile: 'bolt',
     special: 'armorPierce',
     levels: [
-      { damage: 45, range: 18, fireRate: 0.4, cost: 100 },
-      { damage: 75, range: 20, fireRate: 0.5, cost: 120 },
-      { damage: 120, range: 22, fireRate: 0.6, cost: 160 },
+      { damage: 36, range: 18, fireRate: 0.4, cost: 100 },
+      { damage: 60, range: 20, fireRate: 0.5, cost: 120 },
+      { damage: 96, range: 22, fireRate: 0.6, cost: 160 },
     ],
   },
   bucher: {
@@ -52,9 +52,9 @@ export const TOWER_TYPES = {
     projectile: 'fireball',
     special: 'dot',
     levels: [
-      { damage: 7, range: 10, fireRate: 1.0, cost: 80 },   // damage = dégâts/seconde
-      { damage: 13, range: 12, fireRate: 1.0, cost: 100 },
-      { damage: 20, range: 14, fireRate: 1.0, cost: 140 },
+      { damage: 6, range: 10, fireRate: 1.0, cost: 80 },   // damage = dégâts/seconde
+      { damage: 10, range: 12, fireRate: 1.0, cost: 100 },
+      { damage: 16, range: 14, fireRate: 1.0, cost: 140 },
     ],
   },
   glace: {
@@ -68,9 +68,9 @@ export const TOWER_TYPES = {
     slowFactor: 0.5,           // réduit la vitesse de 50%
     slowDuration: 2,           // secondes
     levels: [
-      { damage: 5, range: 12, fireRate: 1.0, cost: 70 },
-      { damage: 9, range: 14, fireRate: 1.2, cost: 90 },
-      { damage: 15, range: 16, fireRate: 1.5, cost: 130 },
+      { damage: 4, range: 12, fireRate: 1.0, cost: 70 },
+      { damage: 7, range: 14, fireRate: 1.2, cost: 90 },
+      { damage: 12, range: 16, fireRate: 1.5, cost: 130 },
     ],
   },
 };

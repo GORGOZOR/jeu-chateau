@@ -170,6 +170,9 @@ function pickRandomAura() {
   return ELITE_AURA_IDS[Math.floor(Math.random() * ELITE_AURA_IDS.length)];
 }
 
+// Multiplicateur global des gains d'or (ajustement d'equilibrage T7.2).
+const GOLD_REWARD_MULT = 1.3;
+
 export function makeEnemyConfig(typeId, elite = false, mods = {}) {
   const base = ENEMY_TYPES[typeId];
   if (!base) throw new Error('Type d\'ennemi inconnu : ' + typeId);
@@ -189,7 +192,7 @@ export function makeEnemyConfig(typeId, elite = false, mods = {}) {
     : { ...base, elite: false };
   // Modificateurs de difficulté appliqués par-dessus (PV et or).
   cfg.hp = Math.round(cfg.hp * hpMult);
-  cfg.gold = Math.round(cfg.gold * goldMult);
+  cfg.gold = Math.round(cfg.gold * goldMult * GOLD_REWARD_MULT);
   return cfg;
 }
 
