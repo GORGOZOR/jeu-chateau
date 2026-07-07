@@ -1,0 +1,81 @@
+/* =====================================================================
+   Château Fort — styles de base (T1.1)
+   Périmètre : reset, canvas plein écran, message d'erreur WebGL.
+   Le HUD et les menus viendront dans les lots UI (T6.x).
+   ===================================================================== */
+
+:root {
+  /* Palette crépusculaire médiévale — réutilisée par le rendu et l'UI */
+  --stone:      #3a4756;
+  --stone-dark: #232c38;
+  --parchment:  #e8dcc0;
+  --gold:       #c9a24b;
+  --gold-light: #e6c874;
+  --ink:        #12212e;
+  --night:      #0c1016;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--night);
+  font-family: 'Trebuchet MS', 'Segoe UI', system-ui, sans-serif;
+  color: var(--parchment);
+  /* Empêche la sélection de texte pendant le jeu */
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Le canvas remplit la fenêtre. Le dimensionnement réel du buffer de rendu
+   est géré côté JS (renderer.setSize) pour tenir compte du devicePixelRatio. */
+#scene {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* ------- Message plein écran (erreur WebGL) ------- */
+.fullscreen-message {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: radial-gradient(ellipse at center, #16202c, var(--night));
+}
+
+.fullscreen-message .panel {
+  max-width: 460px;
+  text-align: center;
+  background: rgba(35, 44, 56, 0.7);
+  border: 1px solid var(--stone);
+  border-radius: 12px;
+  padding: 32px 28px;
+  backdrop-filter: blur(4px);
+}
+
+.fullscreen-message h1 {
+  color: var(--gold-light);
+  font-size: 26px;
+  letter-spacing: 1px;
+  margin-bottom: 14px;
+}
+
+.fullscreen-message p {
+  font-size: 15px;
+  line-height: 1.6;
+  opacity: 0.85;
+}
+
+.hidden {
+  display: none !important;
+}
